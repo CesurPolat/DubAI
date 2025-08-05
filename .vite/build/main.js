@@ -9,7 +9,8 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js")
     }
   });
-  win.loadURL("http://localhost:4200");
+  win.setMenuBarVisibility(false);
+  win.loadURL("http://localhost:4200/welcome");
 }
 app.whenReady().then(() => {
   createWindow();

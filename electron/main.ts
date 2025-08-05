@@ -10,7 +10,9 @@ function createWindow () {
     }
   })
 
-  win.loadURL('http://localhost:4200')
+  win.setMenuBarVisibility(false)
+
+  win.loadURL('http://localhost:4200/welcome')
 }
 
 app.whenReady().then(() => {
