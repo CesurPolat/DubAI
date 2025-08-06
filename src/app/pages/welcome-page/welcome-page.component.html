@@ -1,3 +1,19 @@
-<div>
-    <p>welcome-page works!</p>
+<div class="bg-blue-400 text-white h-screen flex flex-col items-center justify-center">
+
+    @switch (currentView) {
+        @case ('welcome'){
+            <app-welcome (startInstallation)="startInstallation()"></app-welcome>
+        }
+        @case ('folderSelection'){
+            <app-folder-selection></app-folder-selection>
+        }
+        @case ('noInternet'){
+            <app-no-internet></app-no-internet>
+        }
+        @default{
+            <app-welcome></app-welcome>
+        }
+    }
+
+
 </div>
