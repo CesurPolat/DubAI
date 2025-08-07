@@ -1,4 +1,5 @@
-<div class="bg-blue-400 text-white h-screen flex flex-col items-center justify-center">
+<div class=" text-white h-screen flex flex-col items-center justify-center" 
+     [ngClass]="backgroundColor">
 
     @switch (currentView) {
         @case ('welcome'){
@@ -7,8 +8,14 @@
         @case ('folderSelection'){
             <app-folder-selection></app-folder-selection>
         }
+        @case ('gptToken') {
+            <app-gpt-token></app-gpt-token>
+        }
         @case ('noInternet'){
-            <app-no-internet></app-no-internet>
+            <app-no-internet (retry)="startInstallation()"></app-no-internet>
+        }
+        @case ('loading') {
+            <app-loading></app-loading>
         }
         @default{
             <app-welcome></app-welcome>
