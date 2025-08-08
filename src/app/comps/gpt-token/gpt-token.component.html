@@ -1,1 +1,19 @@
-<p>gpt-token works!</p>
+
+<div class="flex items-center">
+
+    <app-gpt-icon></app-gpt-icon>
+
+    <h2 class="text-2xl ml-1">
+        Enter your GPT Token
+    </h2>
+
+</div>
+
+<p class="mt-2 text-sm text-white">
+    GPT Token for transcription and TTS services.
+</p>
+
+<input type="text" [(ngModel)]="gptToken" class="mt-4 w-sm px-4 py-2 border rounded" placeholder="Enter your GPT Token"><br>
+
+<button (click)="saveGptToken()" class="mt-4 px-4 py-2 bg-white text-blue-400 rounded float-end inline-flex items-center hover:bg-gray-200 cursor-pointer">Next
+    <ng-icon class="ml-1" name="matArrowRightAlt"></ng-icon></button>

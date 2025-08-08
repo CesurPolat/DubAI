@@ -1,9 +1,18 @@
-<h2 class="text-2xl mt-8">
-    Select a folder to start
-</h2>
+<div class="flex items-center">
 
-<input type="file" webkitdirectory directory class="mt-4 px-4 py-2 border border-gray-300 rounded cursor-pointer">
+    <ng-icon name="matFolder" class="text-4xl"></ng-icon>
 
-<p class="mt-2 text-sm text-gray-600">
-    Choose the folder containing your video files.
+    <h2 class="text-2xl ml-1">
+        Select a folder to start
+    </h2>
+
+</div>
+
+<p class="mt-2 text-sm text-white">
+    Select the folder where your videos will be stored.
 </p>
+
+<input type="file" [value]="folderPath" webkitdirectory directory class="mt-4 w-sm px-4 py-2 border rounded cursor-pointer"><br>
+
+<button (click)="saveFolderSelection()" class="mt-4 px-4 py-2 bg-white text-blue-400 rounded float-end inline-flex items-center hover:bg-gray-200 cursor-pointer">Next
+    <ng-icon class="ml-1" name="matArrowRightAlt"></ng-icon></button>

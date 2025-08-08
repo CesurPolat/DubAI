@@ -1,4 +1,4 @@
-<div class=" text-white h-screen flex flex-col items-center justify-center" 
+<div class=" text-white h-screen flex flex-col items-center justify-center transition duration-300" 
      [ngClass]="backgroundColor">
 
     @switch (currentView) {
@@ -9,7 +9,10 @@
             <app-folder-selection></app-folder-selection>
         }
         @case ('gptToken') {
-            <app-gpt-token></app-gpt-token>
+            <app-gpt-token (gptTokenEnteredEvent)="startInstallation()"></app-gpt-token>
+        }
+        @case ('installationComplete') {
+            <app-installation-completed></app-installation-completed>
         }
         @case ('noInternet'){
             <app-no-internet (retry)="startInstallation()"></app-no-internet>

@@ -5,16 +5,17 @@ import { NoInternetComponent } from '../../comps/no-internet/no-internet.compone
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../../comps/loading/loading.component';
 import { GptTokenComponent } from '../../comps/gpt-token/gpt-token.component';
+import { InstallationCompletedComponent } from '../../comps/installation-completed/installation-completed.component';
 
 @Component({
   selector: 'app-welcome-page',
-  imports: [WelcomeComponent, FolderSelectionComponent, GptTokenComponent, NoInternetComponent, LoadingComponent, CommonModule],
+  imports: [WelcomeComponent, FolderSelectionComponent, GptTokenComponent, InstallationCompletedComponent, NoInternetComponent, LoadingComponent, CommonModule],
   templateUrl: './welcome-page.component.html',
   styleUrl: './welcome-page.component.css'
 })
 export class WelcomePageComponent {
 
-  currentView: 'welcome' | 'folderSelection' | 'gptToken' | 'noInternet' | 'loading' = 'welcome';
+  currentView: 'welcome' | 'folderSelection' | 'gptToken' | 'installationComplete' | 'noInternet' | 'loading' = 'welcome';
 
   backgroundColor: string = 'bg-blue-400';
 
@@ -46,8 +47,20 @@ export class WelcomePageComponent {
       return;
     }
 
-    this.currentView = 'folderSelection';
-    this.backgroundColor = 'bg-blue-400';
+    /* if(localStorage.getItem('folderPath') === null) {
+      this.currentView = 'folderSelection';
+      this.backgroundColor = 'bg-blue-400';
+      return;
+    } */
+
+    if(localStorage.getItem('gptToken') === null) {
+      this.currentView = 'gptToken';
+      this.backgroundColor = 'bg-blue-400';
+      return;
+    }
+
+    this.currentView = 'installationComplete';
+    this.backgroundColor = 'bg-green-400';
   }
 
 }
