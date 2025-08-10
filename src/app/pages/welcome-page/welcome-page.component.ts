@@ -47,17 +47,17 @@ export class WelcomePageComponent {
       return;
     }
 
-    /* if(localStorage.getItem('folderPath') === null) {
+    if(localStorage.getItem('folderPath') === null) {
       this.currentView = 'folderSelection';
       this.backgroundColor = 'bg-blue-400';
       return;
-    } */
+    }
 
-    if(localStorage.getItem('gptToken') === null) {
+    /* if(localStorage.getItem('gptToken') === null) {
       this.currentView = 'gptToken';
       this.backgroundColor = 'bg-blue-400';
       return;
-    }
+    } */
 
     this.currentView = 'installationComplete';
     this.backgroundColor = 'bg-green-400';

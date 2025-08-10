@@ -1,10 +1,11 @@
-const { app, BrowserWindow, ipcMain } = require('electron/main')
+import { ipcMain, app, BrowserWindow, IpcMain, dialog } from 'electron';
 const path = require('node:path')
 
-import * as installationService from './services/installation.service';
+import { InstallationService } from './services/installation.service';
 
+const installationService = new InstallationService();
 
-function createWindow () {
+function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -14,6 +15,8 @@ function createWindow () {
   })
 
   win.setMenuBarVisibility(false)
+
+  win.webContents.openDevTools()
 
   win.loadURL('http://localhost:4200/welcome')
 

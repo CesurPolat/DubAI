@@ -16,8 +16,7 @@ export class FolderSelectionComponent {
   folderPath: string = '';
 
   saveFolderSelection() {
-    console.log(this.folderPath);
-    this.folderSelectedEvent.emit();
+    window.API.SelectDirectory();
   }
 
 }
