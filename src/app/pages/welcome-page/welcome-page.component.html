@@ -6,10 +6,13 @@
             <app-welcome (startInstallation)="startInstallation()"></app-welcome>
         }
         @case ('folderSelection'){
-            <app-folder-selection></app-folder-selection>
+            <app-folder-selection (folderSelectedEvent)="startInstallation()"></app-folder-selection>
         }
         @case ('gptToken') {
             <app-gpt-token (gptTokenEnteredEvent)="startInstallation()"></app-gpt-token>
+        }
+        @case ('ffmpegInstallation') {
+            <app-ffmpeg-installation (ffmpegInstallationCompleted)="startInstallation()"></app-ffmpeg-installation>
         }
         @case ('installationComplete') {
             <app-installation-completed></app-installation-completed>

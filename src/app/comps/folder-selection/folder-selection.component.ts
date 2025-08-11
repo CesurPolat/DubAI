@@ -16,7 +16,11 @@ export class FolderSelectionComponent {
   folderPath: string = '';
 
   saveFolderSelection() {
-    window.API.SelectDirectory();
+    window.API.SelectDirectory().then((result) => {
+      if (result) {
+        this.folderSelectedEvent.emit();
+      }
+    });
   }
 
 }

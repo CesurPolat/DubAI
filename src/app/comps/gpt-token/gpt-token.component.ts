@@ -19,8 +19,9 @@ export class GptTokenComponent {
   gptToken: string = '';
 
   saveGptToken() {
-    localStorage.setItem('gptToken', this.gptToken);
-    this.gptTokenEnteredEvent.emit();
+    window.API.SetGPTToken(this.gptToken).then(() => {
+      this.gptTokenEnteredEvent.emit();
+    });
   }
 
 }

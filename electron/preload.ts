@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
+import { SetupStatus } from './services/installation.service';
 
 export interface IAPIs {
     SelectDirectory: () => Promise<boolean>;
@@ -14,3 +15,9 @@ const APIs: IAPIs = {
 };
 
 contextBridge.exposeInMainWorld('API', APIs)
+
+//Prevent Back & Next Page Buttons From Mouse
+window.addEventListener("mouseup", (e) => {
+    if (e.button === 3 || e.button === 4)
+        e.preventDefault();
+});

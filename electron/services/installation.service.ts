@@ -1,4 +1,5 @@
 import { ipcMain, dialog, ipcRenderer } from "electron";
+import { exec } from 'child_process';
 import Store from 'electron-store';
 
 //Note that this is not intended for security purposes, since the encryption key would be easily 
@@ -10,6 +11,13 @@ import Store from 'electron-store';
 
 const store = new Store({ encryptionKey: 'SBDS9ZB8pr/RUgSeQWnd/tfuocRiNCVmctwsOCFGhUlE36eD+IwaU/Hi9i9t8OdD' });
 
+export enum SetupStatus {
+  OK = 0,
+  NO_VIDEOS_DIRECTORY = -1,
+  NO_GPT_TOKEN = -2,
+  NO_FFMPEG = -3
+}
+
 export class InstallationService {
 
   constructor() {
@@ -19,7 +27,7 @@ export class InstallationService {
   initListeners(): void {
     ipcMain.handle('selectVideosDirectory', this.selectVideosDirectory)
     ipcMain.handle('setGPTToken', (event, token: string) => this.setGPTToken(token))
-    ipcMain.handle('setupChecker', this.setupChecker)
+    ipcMain.handle('setupChecker', async (event) => this.setupChecker())
 
   }
 
@@ -42,16 +50,32 @@ export class InstallationService {
     return true;
   }
 
-  setupChecker(): number {
+  async checkFFmpeg(): Promise<boolean> {
+    return new Promise((resolve) => {
+      exec('ffmpeg -version', (error, stdout, stderr) => {
+        if (error) {
+          console.log('FFmpeg not found:', error.message);
+          resolve(false);
+        } else {
+          console.log('FFmpeg found:', stdout.split('\n')[0]);
+          resolve(true);
+        }
+      });
+    });
+  }
+
+  async setupChecker(): Promise<number> {
     if (!store.has('videosDirectory'))
-      return -1;
+        return SetupStatus.NO_VIDEOS_DIRECTORY;
 
-    if (!store.has('gptToken'))
-      return -2;
+      if (!store.has('gptToken'))
+        return SetupStatus.NO_GPT_TOKEN;
 
-    //TODO: is FFMPEG installed
+      if (!(await this.checkFFmpeg()))
+        return SetupStatus.NO_FFMPEG;
 
-    return 0;
+      return SetupStatus.OK;
+
   }
 
 }

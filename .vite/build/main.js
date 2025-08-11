@@ -11,6 +11,7 @@ var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot
 var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
 var _validator, _encryptionKey, _options, _defaultValues;
 const electron = require("electron");
+const child_process = require("child_process");
 const process$1 = require("node:process");
 const path$1 = require("node:path");
 const node_util = require("node:util");
@@ -10391,7 +10392,7 @@ class InstallationService {
   initListeners() {
     electron.ipcMain.handle("selectVideosDirectory", this.selectVideosDirectory);
     electron.ipcMain.handle("setGPTToken", (event, token) => this.setGPTToken(token));
-    electron.ipcMain.handle("setupChecker", this.setupChecker);
+    electron.ipcMain.handle("setupChecker", async (event) => this.setupChecker());
   }
   selectVideosDirectory() {
     electron.dialog.showOpenDialog({
@@ -10409,11 +10410,26 @@ class InstallationService {
     store.set("gptToken", token);
     return true;
   }
-  setupChecker() {
+  async checkFFmpeg() {
+    return new Promise((resolve2) => {
+      child_process.exec("ffmpeg -version", (error, stdout, stderr) => {
+        if (error) {
+          console.log("FFmpeg not found:", error.message);
+          resolve2(false);
+        } else {
+          console.log("FFmpeg found:", stdout.split("\n")[0]);
+          resolve2(true);
+        }
+      });
+    });
+  }
+  async setupChecker() {
     if (!store.has("videosDirectory"))
       return -1;
     if (!store.has("gptToken"))
       return -2;
+    if (!await this.checkFFmpeg())
+      return -3;
     return 0;
   }
 }
