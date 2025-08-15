@@ -8,7 +8,7 @@ import { GptTokenComponent } from '../../comps/gpt-token/gpt-token.component';
 import { InstallationCompletedComponent } from '../../comps/installation-completed/installation-completed.component';
 import { FfmpegInstallationComponent } from '../../comps/ffmpeg-installation/ffmpeg-installation.component';
 
-import { SetupStatus } from '../../../../electron/services/installation.service';
+import { SetupStatus } from '../../../../electron/services/setup.service';
 
 @Component({
   selector: 'app-welcome-page',

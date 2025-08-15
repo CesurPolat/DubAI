@@ -1,9 +1,10 @@
-import { ipcMain, app, BrowserWindow, IpcMain, dialog } from 'electron';
+import { app, BrowserWindow } from 'electron';
 const path = require('node:path')
 
-import { InstallationService } from './services/installation.service';
+import { SetupService } from './services/setup.service';
+import { WebInstallationService } from './services/webInstallation.service';
 
-const installationService = new InstallationService();
+
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -14,11 +15,16 @@ function createWindow() {
     }
   })
 
+  const setupService = new SetupService();
+  const webInstallationService = new WebInstallationService(win.webContents);
+
   win.setMenuBarVisibility(false)
 
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools()
 
-  win.loadURL('http://localhost:4200/welcome')
+  win.webContents.session.on('will-download', (event, item, webContents) => webInstallationService.downloadEventListener(event, item, webContents));
+
+  win.loadURL('http://localhost:4200/')
 
 }
 

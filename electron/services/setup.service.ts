@@ -1,15 +1,6 @@
 import { ipcMain, dialog, ipcRenderer } from "electron";
 import { exec } from 'child_process';
-import Store from 'electron-store';
-
-//Note that this is not intended for security purposes, since the encryption key would be easily 
-//found inside a plain - text Node.js app.
-//
-//Its main use is for obscurity.If a user looks through the config directory and finds the config file, 
-//since it's just a JSON file, they may be tempted to modify it. By providing an encryption key, the
-// file will be obfuscated, which should hopefully deter any users from doing so.
-
-const store = new Store({ encryptionKey: 'SBDS9ZB8pr/RUgSeQWnd/tfuocRiNCVmctwsOCFGhUlE36eD+IwaU/Hi9i9t8OdD' });
+import { ConfigService } from "./config.service";
 
 export enum SetupStatus {
   OK = 0,
@@ -18,7 +9,7 @@ export enum SetupStatus {
   NO_FFMPEG = -3
 }
 
-export class InstallationService {
+export class SetupService {
 
   constructor() {
     this.initListeners();
@@ -36,17 +27,17 @@ export class InstallationService {
       properties: ['openDirectory']
     }).then((result: any) => {
       if (!result.canceled) {
-        store.set('videosDirectory', result.filePaths[0]);
+        ConfigService.set('videosDirectory', result.filePaths[0]);
       }
     }).catch((err: any) => {
       console.error(err)
     })
 
-    return store.has('videosDirectory');
+    return ConfigService.has('videosDirectory');
   }
 
   setGPTToken(token: string): boolean {
-    store.set('gptToken', token);
+    ConfigService.set('gptToken', token);
     return true;
   }
 
@@ -65,10 +56,10 @@ export class InstallationService {
   }
 
   async setupChecker(): Promise<number> {
-    if (!store.has('videosDirectory'))
+    if (!ConfigService.has('videosDirectory'))
         return SetupStatus.NO_VIDEOS_DIRECTORY;
 
-      if (!store.has('gptToken'))
+      if (!ConfigService.has('gptToken'))
         return SetupStatus.NO_GPT_TOKEN;
 
       if (!(await this.checkFFmpeg()))

@@ -1,17 +1,19 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { SetupStatus } from './services/installation.service';
+import { SetupStatus } from './services/setup.service';
 
 export interface IAPIs {
     SelectDirectory: () => Promise<boolean>;
     SetGPTToken: (token: string) => Promise<boolean>;
     SetupChecker: () => Promise<number>;
+    DownloadContent: (url: string) => Promise<void>;
 }
 
 const APIs: IAPIs = {
-    // Installation Service Listeners
+    // Setup Service Listeners
     SelectDirectory: () => ipcRenderer.invoke('selectVideosDirectory'),
     SetGPTToken: (token: string) => ipcRenderer.invoke('setGPTToken', token),
-    SetupChecker: () => ipcRenderer.invoke('setupChecker')
+    SetupChecker: () => ipcRenderer.invoke('setupChecker'),
+    DownloadContent: (url: string) => ipcRenderer.invoke('downloadContent', url)
 };
 
 contextBridge.exposeInMainWorld('API', APIs)

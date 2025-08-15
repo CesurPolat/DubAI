@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +9,19 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'DubAI';
+
+  private router = inject(Router);
+
+  constructor() {
+    window.API.SetupChecker().then((status: number) => {
+      if (status === 0) {
+        this.router.navigate(['/home']);
+      }
+      else {
+        this.router.navigate(['/welcome']);
+      }
+
+    });
+
+  }
 }
