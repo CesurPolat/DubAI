@@ -1,9 +1,16 @@
 import { DownloadItem, Event, ipcMain, WebContents } from "electron";
 import { ConfigService } from "./config.service";
-import { exec, spawn } from "child_process";
-//const { spawn } = require('child_process');
+import { exec, execFile, spawn } from "child_process";
+import { promisify } from "util";
 
-const axios = require('axios')
+const execFilePromise = promisify(execFile);
+
+export interface ContentInfo {
+  platform: string;
+  title: string;
+  duration: string;
+  mediaUrls: string[];
+}
 
 export class WebInstallationService {
 
@@ -15,7 +22,7 @@ export class WebInstallationService {
   }
 
   initListeners(): void {
-    ipcMain.handle('downloadContent', (event, url: string) => this.downloadContent(url));
+    ipcMain.handle('downloadContent', (event, url: string) => this.getContentInfo(url));
   }
 
   downloadEventListener(event: Event, item: DownloadItem, webContents: WebContents): void {
@@ -131,86 +138,36 @@ export class WebInstallationService {
 
   }
 
-  downloadContent(url: string): void {
+  async getContentInfo(url: string): Promise<ContentInfo> {
 
-    exec(`"C:\\ffmpeg\\yt-dlp.exe" --print "%(extractor)s" --get-url ${url}"`, (error, stdout, stderr) => {
-      if (error) {
-        //console.error(`exec error: ${error}`);
-        //console.error(`stderr: ${stderr}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-    });
+    let platform: any;
+    let title: any;
+    let duration: any;
+    let urls: any[] = [];
 
-    
+    const { stdout } = await execFilePromise(`C:\\ffmpeg\\yt-dlp.exe`, [`--print`, `%(extractor)s;%(title)s;%(duration_string)s`, `--no-playlist`, `--get-url`, url]);
 
-  }
+    const consoleOutputs = stdout.split('\n');
+    [platform, title, duration] = consoleOutputs[0].split(';');
+    urls = consoleOutputs.slice(1).map(line => line.trim()).filter(line => line);
 
-  getContentProvider(url: string): string | null {
-    if (url.includes("youtube.com") || url.includes("youtu.be")) {
-      return "youtube";
-    } else if (url.includes("twitter.com") || url.includes("twimg.com") || url.includes("x.com")) {
-      return "twitter";
-    } else if (url.includes("tiktok.com")) {
-      return "tiktok";
-    } else if (url.includes("C://") || url.includes("D://")) {
-      return "local";
-    } else {
-      return "generic";
-    }
-  }
+    //console.log(`Platform: ${platform}`);
+    console.log(`Title: ${title}`);
+    //console.log(`Duration: ${duration}`);
+    //console.log(`URLs: ${urls.join(', ')}`);
 
-  async downloadYouTubeVideo(url: string): Promise<void> {
+    return {
+      platform,
+      title,
+      duration,
+      mediaUrls: urls
+    };
 
-    const command = `"C:\\ffmpeg\\yt-dlp.exe" --print "%(extractor)s" --get-url ${url}`;
-    const proc = spawn(command, { shell: true });
-
-    proc.stdout.on('data', (data: Buffer) => {
-      var output = data.toString();
-      output.split('\n').forEach((line: string) => {
-        if (line) {
-          console.log(`stdout: ${line}`);
-        }
-      });
-    });
-
-    proc.stderr.on('data', (data: Buffer) => {
-      console.error(`stderr: ${data}`);
-      //process.stderr.write(data);
-    });
-
-    proc.on('error', (error: Error) => {
-      console.error(`Error: ${error.message}`);
-    });
-
-    proc.on('close', (code: number) => {
-      if (code === 0) {
-        console.log('Process finished successfully.');
-      } else {
-        console.error(`Process exited with code ${code}`);
-      }
-    });
-
-  }
-
-  downloadTwitterVideos(url: string): void {
-
-  }
-
-  downloadTikTokVideo(url: string): void {
-
-  }
-
-  downloadLocalFile(url: string): void {
-    this._webContents.downloadURL(url);
   }
 
   downloadUrl(url: string): void {
     this._webContents.downloadURL(url);
   }
-
-
-
 
 
 }

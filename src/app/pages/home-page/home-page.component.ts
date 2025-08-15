@@ -15,8 +15,10 @@ export class HomePageComponent {
 
   url:string = '';
 
-  transcribeAudio(): void {
-    window.API.DownloadContent(this.url);
+  transcribeAudio() {
+    var contentInfo = window.API.DownloadContent(this.url);
+    console.log(contentInfo);
+
   }
 
 }
