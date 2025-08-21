@@ -7,6 +7,7 @@ import { LoadingComponent } from '../../comps/loading/loading.component';
 import { GptTokenComponent } from '../../comps/gpt-token/gpt-token.component';
 import { InstallationCompletedComponent } from '../../comps/installation-completed/installation-completed.component';
 import { FfmpegInstallationComponent } from '../../comps/ffmpeg-installation/ffmpeg-installation.component';
+import { gsap } from 'gsap';
 
 import { SetupStatus } from '../../../../electron/services/setup.service';
 
@@ -22,10 +23,16 @@ export class WelcomePageComponent {
 
   backgroundColor: string = 'bg-blue-400';
 
+  ngAfterContentInit() {
+    console.log("View Initialized");
+
+    gsap.set(`#${this.currentView}`, { display: 'block' });
+  }
+
   startInstallation() {
 
     if (this.currentView == 'noInternet' || this.currentView == 'ffmpegInstallation') {
-      this.currentView = 'loading';
+      this.changeView('loading');
       this.backgroundColor = 'bg-blue-400';
       setTimeout(() => {
         this.startInstallation();
@@ -34,7 +41,7 @@ export class WelcomePageComponent {
     }
 
     if (!navigator.onLine) {
-      this.currentView = 'noInternet';
+      this.changeView('noInternet');
       this.backgroundColor = 'bg-red-400';
       return;
     }
@@ -45,28 +52,41 @@ export class WelcomePageComponent {
 
       switch (result) {
         case -1:
-          this.currentView = 'folderSelection';
+          this.changeView('folderSelection');
           this.backgroundColor = 'bg-blue-400';
           return;
 
         case -2:
-          this.currentView = 'gptToken';
+          this.changeView('gptToken');
           this.backgroundColor = 'bg-blue-400';
           return;
 
         case -3:
-          this.currentView = 'ffmpegInstallation';
+          this.changeView('ffmpegInstallation');
           this.backgroundColor = 'bg-blue-400';
           return;
 
         case 0:
-          this.currentView = 'installationComplete';
+          this.changeView('installationComplete');
           this.backgroundColor = 'bg-green-400';
           return;
 
       }
     });
 
+  }
+
+  changeView(view: 'welcome' | 'folderSelection' | 'gptToken' | 'ffmpegInstallation' | 'installationComplete' | 'noInternet' | 'loading') {
+    gsap.to(`#${this.currentView}`, {
+      opacity: 0, x: -200, ease: 'power2.inOut', duration: 0.3, onComplete: () => {
+
+        gsap.set(`#${this.currentView}`, { display: 'none' });
+        this.currentView = view;
+        gsap.set(`#${this.currentView}`, { display: 'block' });
+        gsap.from(`#${this.currentView}`, { opacity: 0, x: 200, duration: 0.3, ease: 'power2.inOut' });
+
+      }
+    });
   }
 
 }

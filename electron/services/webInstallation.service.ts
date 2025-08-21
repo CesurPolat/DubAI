@@ -143,13 +143,13 @@ export class WebInstallationService {
     let platform: any;
     let title: any;
     let duration: any;
-    let urls: any[] = [];
+    let mediaUrls: any[] = [];
 
     const { stdout } = await execFilePromise(`C:\\ffmpeg\\yt-dlp.exe`, [`--print`, `%(extractor)s;%(title)s;%(duration_string)s`, `--no-playlist`, `--get-url`, url]);
 
     const consoleOutputs = stdout.split('\n');
     [platform, title, duration] = consoleOutputs[0].split(';');
-    urls = consoleOutputs.slice(1).map(line => line.trim()).filter(line => line);
+    mediaUrls = consoleOutputs.slice(1).map(line => line.trim()).filter(line => line);
 
     //console.log(`Platform: ${platform}`);
     console.log(`Title: ${title}`);
@@ -160,7 +160,7 @@ export class WebInstallationService {
       platform,
       title,
       duration,
-      mediaUrls: urls
+      mediaUrls
     };
 
   }

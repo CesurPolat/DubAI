@@ -3,6 +3,7 @@ const path = require('node:path')
 
 import { SetupService } from './services/setup.service';
 import { WebInstallationService } from './services/webInstallation.service';
+import { ConfigService } from './services/config.service';
 
 
 
@@ -21,6 +22,8 @@ function createWindow() {
   win.setMenuBarVisibility(false)
 
   //win.webContents.openDevTools()
+
+  ConfigService.clear()
 
   win.webContents.session.on('will-download', (event, item, webContents) => webInstallationService.downloadEventListener(event, item, webContents));
 

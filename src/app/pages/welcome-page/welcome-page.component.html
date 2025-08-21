@@ -1,32 +1,12 @@
 <div class=" text-white h-screen flex flex-col items-center justify-center transition duration-300" 
      [ngClass]="backgroundColor">
-
-    @switch (currentView) {
-        @case ('welcome'){
-            <app-welcome (startInstallation)="startInstallation()"></app-welcome>
-        }
-        @case ('folderSelection'){
-            <app-folder-selection (folderSelectedEvent)="startInstallation()"></app-folder-selection>
-        }
-        @case ('gptToken') {
-            <app-gpt-token (gptTokenEnteredEvent)="startInstallation()"></app-gpt-token>
-        }
-        @case ('ffmpegInstallation') {
-            <app-ffmpeg-installation (ffmpegInstallationCompleted)="startInstallation()"></app-ffmpeg-installation>
-        }
-        @case ('installationComplete') {
-            <app-installation-completed></app-installation-completed>
-        }
-        @case ('noInternet'){
-            <app-no-internet (retry)="startInstallation()"></app-no-internet>
-        }
-        @case ('loading') {
-            <app-loading></app-loading>
-        }
-        @default{
-            <app-welcome></app-welcome>
-        }
-    }
-
+     
+     <app-welcome id="welcome" class="component" (startInstallation)="startInstallation()"></app-welcome>
+     <app-folder-selection id="folderSelection" class="component" (folderSelectedEvent)="startInstallation()"></app-folder-selection>
+     <app-gpt-token id="gptToken" class="component" (gptTokenEnteredEvent)="startInstallation()"></app-gpt-token>
+     <app-ffmpeg-installation id="ffmpegInstallation" class="component" (ffmpegInstallationCompleted)="startInstallation()"></app-ffmpeg-installation>
+     <app-installation-completed id="installationComplete" class="component"></app-installation-completed>
+     <app-no-internet id="noInternet" class="component" (retry)="startInstallation()"></app-no-internet>
+     <app-loading id="loading" class="component"></app-loading>
 
 </div>
