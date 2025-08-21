@@ -22,18 +22,18 @@ export class SetupService {
 
   }
 
-  selectVideosDirectory(): boolean {
-    dialog.showOpenDialog({
-      properties: ['openDirectory']
-    }).then((result: any) => {
-      if (!result.canceled) {
-        ConfigService.set('videosDirectory', result.filePaths[0]);
-      }
-    }).catch((err: any) => {
-      console.error(err)
-    })
+  selectVideosDirectory(): string {
 
-    return ConfigService.has('videosDirectory');
+     var result = dialog.showOpenDialogSync({
+      properties: ['openDirectory']
+    })?.[0] || '-1';
+
+    if (result !== '-1') {
+      ConfigService.set('videosDirectory', result);
+    }
+
+    return result;
+
   }
 
   setGPTToken(token: string): boolean {

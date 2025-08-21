@@ -13,14 +13,25 @@ export class FolderSelectionComponent {
 
   @Output() folderSelectedEvent = new EventEmitter<void>();
 
-  folderPath: string = '';
+  folderPath: string = 'Please select a folder';
 
   saveFolderSelection() {
     window.API.SelectDirectory().then((result) => {
-      if (result) {
-        this.folderSelectedEvent.emit();
+
+      if (result === '-1') {
+        this.folderPath = 'Folder selection failed or was canceled.';
+        return;
       }
+      else{
+        this.folderPath = result;
+        return;
+      }
+      
     });
+  }
+
+  nextStep() {
+    this.folderSelectedEvent.emit();
   }
 
 }

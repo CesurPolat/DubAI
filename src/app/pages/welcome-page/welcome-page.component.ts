@@ -25,7 +25,6 @@ export class WelcomePageComponent {
 
   ngAfterContentInit() {
     console.log("View Initialized");
-
     gsap.set(`#${this.currentView}`, { display: 'block' });
   }
 
@@ -80,7 +79,7 @@ export class WelcomePageComponent {
     gsap.to(`#${this.currentView}`, {
       opacity: 0, x: -200, ease: 'power2.inOut', duration: 0.3, onComplete: () => {
 
-        gsap.set(`#${this.currentView}`, { display: 'none' });
+        gsap.set(`#${this.currentView}`, { display: 'none', opacity: 1, x: 0 });
         this.currentView = view;
         gsap.set(`#${this.currentView}`, { display: 'block' });
         gsap.from(`#${this.currentView}`, { opacity: 0, x: 200, duration: 0.3, ease: 'power2.inOut' });

@@ -3,7 +3,7 @@ import { SetupStatus } from './services/setup.service';
 import { ContentInfo } from './services/webInstallation.service';
 
 export interface IAPIs {
-    SelectDirectory: () => Promise<boolean>;
+    SelectDirectory: () => Promise<string>;
     SetGPTToken: (token: string) => Promise<boolean>;
     SetupChecker: () => Promise<number>;
 
