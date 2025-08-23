@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FfmpegIconComponent } from "../../icons/ffmpeg-icon/ffmpeg-icon.component";
+import { FfmpegIconComponent } from '../../../../shared/icons/ffmpeg-icon/ffmpeg-icon.component';
 
 @Component({
   selector: 'app-ffmpeg-installation',

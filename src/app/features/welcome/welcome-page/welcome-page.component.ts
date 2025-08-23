@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { WelcomeComponent } from '../../comps/welcome/welcome.component';
-import { FolderSelectionComponent } from "../../comps/folder-selection/folder-selection.component";
-import { NoInternetComponent } from '../../comps/no-internet/no-internet.component';
+import { WelcomeComponent } from '../components/welcome/welcome.component';
+import { FolderSelectionComponent } from "../components/folder-selection/folder-selection.component";
 import { CommonModule } from '@angular/common';
-import { LoadingComponent } from '../../comps/loading/loading.component';
-import { GptTokenComponent } from '../../comps/gpt-token/gpt-token.component';
-import { InstallationCompletedComponent } from '../../comps/installation-completed/installation-completed.component';
-import { FfmpegInstallationComponent } from '../../comps/ffmpeg-installation/ffmpeg-installation.component';
+import { GptTokenComponent } from '../components/gpt-token/gpt-token.component';
+import { InstallationCompletedComponent } from '../components/installation-completed/installation-completed.component';
+import { NoInternetComponent } from '../../../shared/components/no-internet/no-internet.component';
+import { FfmpegInstallationComponent } from '../components/ffmpeg-installation/ffmpeg-installation.component';
+import { LoadingComponent } from '../../../shared/components/loading/loading.component';
 import { gsap } from 'gsap';
 
-import { SetupStatus } from '../../../../electron/services/setup.service';
+import { SetupStatus } from '../../../../../electron/services/setup.service';
 
 @Component({
   selector: 'app-welcome-page',

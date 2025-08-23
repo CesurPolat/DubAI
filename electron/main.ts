@@ -23,7 +23,7 @@ function createWindow() {
 
   //win.webContents.openDevTools()
 
-  ConfigService.clear()
+  //ConfigService.clear()
 
   win.webContents.session.on('will-download', (event, item, webContents) => webInstallationService.downloadEventListener(event, item, webContents));
 

@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { GptIconComponent } from "../../icons/gpt-icon/gpt-icon.component";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from "@ng-icons/core";
 import { matArrowRightAlt } from '@ng-icons/material-icons/baseline';
+import { GptIconComponent } from '../../../../shared/icons/gpt-icon/gpt-icon.component';
 
 @Component({
   selector: 'app-gpt-token',
