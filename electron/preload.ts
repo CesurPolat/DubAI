@@ -7,7 +7,7 @@ export interface IAPIs {
     SetGPTToken: (token: string) => Promise<boolean>;
     SetupChecker: () => Promise<number>;
 
-    DownloadContent: (url: string) => Promise<ContentInfo | undefined>;
+    DownloadContent: (url: string) => Promise<ContentInfo>;
 }
 
 const APIs: IAPIs = {

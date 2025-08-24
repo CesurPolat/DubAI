@@ -75,6 +75,7 @@ export class WelcomePageComponent {
 
   }
 
+  //TODO: create a service for sliding animations of components
   changeView(view: 'welcome' | 'folderSelection' | 'gptToken' | 'ffmpegInstallation' | 'installationComplete' | 'noInternet' | 'loading') {
     gsap.to(`#${this.currentView}`, {
       opacity: 0, x: -200, ease: 'power2.inOut', duration: 0.3, onComplete: () => {
@@ -87,5 +88,6 @@ export class WelcomePageComponent {
       }
     });
   }
+  
 
 }

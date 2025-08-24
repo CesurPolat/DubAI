@@ -24,7 +24,7 @@ export class SetupService {
 
   selectVideosDirectory(): string {
 
-     var result = dialog.showOpenDialogSync({
+    var result = dialog.showOpenDialogSync({
       properties: ['openDirectory']
     })?.[0] || '-1';
 
@@ -57,15 +57,15 @@ export class SetupService {
 
   async setupChecker(): Promise<number> {
     if (!ConfigService.has('videosDirectory'))
-        return SetupStatus.NO_VIDEOS_DIRECTORY;
+      return SetupStatus.NO_VIDEOS_DIRECTORY;
 
-      if (!ConfigService.has('gptToken'))
-        return SetupStatus.NO_GPT_TOKEN;
+    if (!ConfigService.has('gptToken'))
+      return SetupStatus.NO_GPT_TOKEN;
 
-      if (!(await this.checkFFmpeg()))
-        return SetupStatus.NO_FFMPEG;
+    if (!(await this.checkFFmpeg()))
+      return SetupStatus.NO_FFMPEG;
 
-      return SetupStatus.OK;
+    return SetupStatus.OK;
 
   }
 
