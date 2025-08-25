@@ -30,26 +30,13 @@ export class HomePageComponent {
       rotate: 60,
       duration: 0.2,
     });
+
   }
 
   settingsButtonExited() {
     gsap.to("#settingsBtn", {
       rotate: 0,
       duration: 0.2,
-    });
-  }
-
-  //TODO: create a service for sliding animations of components
-  changeView(view: 'contentPicker' | 'contentViewer') {
-    gsap.to(`#${this.currentView}`, {
-      opacity: 0, x: -200, ease: 'power2.inOut', duration: 0.3, onComplete: () => {
-
-        gsap.set(`#${this.currentView}`, { display: 'none', opacity: 1, x: 0 });
-        this.currentView = view;
-        gsap.set(`#${this.currentView}`, { display: 'block' });
-        gsap.from(`#${this.currentView}`, { opacity: 0, x: 200, duration: 0.3, ease: 'power2.inOut' });
-
-      }
     });
   }
 

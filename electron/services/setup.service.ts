@@ -6,7 +6,7 @@ export enum SetupStatus {
   OK = 0,
   NO_VIDEOS_DIRECTORY = -1,
   NO_GPT_TOKEN = -2,
-  NO_FFMPEG = -3
+  NO_FFMPEG = -3,
 }
 
 export class SetupService {

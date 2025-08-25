@@ -5,7 +5,7 @@ import { ContentInfo } from './services/webInstallation.service';
 export interface IAPIs {
     SelectDirectory: () => Promise<string>;
     SetGPTToken: (token: string) => Promise<boolean>;
-    SetupChecker: () => Promise<number>;
+    SetupChecker: () => Promise<SetupStatus>;
 
     DownloadContent: (url: string) => Promise<ContentInfo>;
 }
