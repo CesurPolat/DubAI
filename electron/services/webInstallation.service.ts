@@ -1,7 +1,8 @@
 import { DownloadItem, Event, ipcMain, WebContents } from "electron";
 import { ConfigService } from "./config.service";
-import { exec, execFile, spawn } from "child_process";
+import { execFile } from "child_process";
 import { promisify } from "util";
+import { decode } from "iconv-lite";
 
 const execFilePromise = promisify(execFile);
 
@@ -22,7 +23,7 @@ export class WebInstallationService {
   }
 
   initListeners(): void {
-    ipcMain.handle('downloadContent', (event, url: string) => this.getContentInfo(url));
+    ipcMain.handle('getContentInfo', (event, url: string) => this.getContentInfo(url));
   }
 
   downloadEventListener(event: Event, item: DownloadItem, webContents: WebContents): void {
@@ -138,6 +139,10 @@ export class WebInstallationService {
 
   }
 
+  downloadUrl(url: string): void {
+    this._webContents.downloadURL(url);
+  }
+
   async getContentInfo(url: string): Promise<ContentInfo> {
 
     let platform: any;
@@ -145,9 +150,9 @@ export class WebInstallationService {
     let duration: any;
     let mediaUrls: any[] = [];
 
-    const { stdout } = await execFilePromise(`C:\\ffmpeg\\yt-dlp.exe`, [`--print`, `%(extractor)s;%(title)s;%(duration_string)s`, `--no-playlist`, `--get-url`, url]);
-
-    const consoleOutputs = stdout.split('\n');
+    const { stdout } = await execFilePromise(`C:\\ffmpeg\\yt-dlp.exe`, [`--print`, `%(extractor)s;%(title)s;%(duration_string)s`, `--no-playlist`, `--get-url`, url], { encoding: 'buffer' });
+    var decoded = decode(stdout, 'utf-8');
+    const consoleOutputs = decoded.split('\n');
     [platform, title, duration] = consoleOutputs[0].split(';');
     mediaUrls = consoleOutputs.slice(1).map(line => line.trim()).filter(line => line);
 
@@ -165,9 +170,7 @@ export class WebInstallationService {
 
   }
 
-  downloadUrl(url: string): void {
-    this._webContents.downloadURL(url);
-  }
+  
 
 
 }

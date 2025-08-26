@@ -12,7 +12,15 @@
         <ng-icon name="matFolder" class="text-center text-2xl "></ng-icon>
     </div>
 
-    <button (click)="transcribeAudio()"
-        class="bg-white hover:bg-gray-200 cursor-pointer text-blue-400 p-2 rounded w-xs">Transcribe</button>
-        
+    <div (click)="transcribeAudio()"
+        class="hover:bg-gray-200  text-blue-400 p-2 rounded w-xs flex justify-center"
+        [ngClass]="isContentInfoLoading ? 'bg-gray-200 cursor-not-allowed' : 'bg-white cursor-pointer'">
+        @if(!isContentInfoLoading){
+            <p>Transcribe</p>
+        }
+        @else{
+            <app-loading></app-loading>
+        }
+    </div>
+
 </div>

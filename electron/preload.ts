@@ -3,11 +3,13 @@ import { SetupStatus } from './services/setup.service';
 import { ContentInfo } from './services/webInstallation.service';
 
 export interface IAPIs {
+    // Setup Service
     SelectDirectory: () => Promise<string>;
     SetGPTToken: (token: string) => Promise<boolean>;
     SetupChecker: () => Promise<SetupStatus>;
 
-    DownloadContent: (url: string) => Promise<ContentInfo>;
+    // Web Installation Service
+    GetContentInfo: (url: string) => Promise<ContentInfo>;
 }
 
 const APIs: IAPIs = {
@@ -17,7 +19,7 @@ const APIs: IAPIs = {
     SetupChecker: () => ipcRenderer.invoke('setupChecker'),
 
     // Web Installation Service
-    DownloadContent: (url: string) => ipcRenderer.invoke('downloadContent', url)
+    GetContentInfo: (url: string) => ipcRenderer.invoke('getContentInfo', url)
 };
 
 contextBridge.exposeInMainWorld('API', APIs)

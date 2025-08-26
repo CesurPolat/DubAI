@@ -1,17 +1,17 @@
 <div class="text-white h-screen flex flex-col items-center justify-between transition duration-300"
     [ngClass]="backgroundColor">
 
-    <div class="w-full p-4">
-        <ng-icon name="matSettings" id="settingsBtn" class="float-end text-3xl cursor-pointer"
+    <div class="w-full h-6">
+        <ng-icon name="matSettings" id="settingsBtn" class="float-end text-3xl m-4 cursor-pointer"
             (mouseenter)="settingsButtonEntered()" (mouseleave)="settingsButtonExited()"></ng-icon>
     </div>
 
-    <div>
-        <app-content-picker id="contentPicker" class="component"></app-content-picker>
-        <app-content-viewer id="contentViewer" class="component"></app-content-viewer>
+    <div class="">
+        <app-content-picker id="contentPicker" class="component" (contentPicked)="onContentPicked($event)"></app-content-picker>
+        <app-content-viewer id="contentViewer" class="component" [contentInfo]="contentInfo"></app-content-viewer>
     </div>
 
-    <div>
+    <div class="h-6">
         <a class="font-medium underline mt-2 text-sm text-white w-sm" target="_blank"
             href="https://github.com/CesurPolat/DubAI">github.com/CesurPolat/DubAI</a>
     </div>
