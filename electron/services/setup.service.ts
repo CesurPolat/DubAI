@@ -24,7 +24,7 @@ export class SetupService {
 
   selectVideosDirectory(): string {
 
-    var result = dialog.showOpenDialogSync({
+    const result = dialog.showOpenDialogSync({
       properties: ['openDirectory']
     })?.[0] || '-1';
 

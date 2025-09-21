@@ -1,10 +1,10 @@
 import { DownloadItem, Event, ipcMain, WebContents } from "electron";
 import { ConfigService } from "./config.service";
-import { execFile } from "child_process";
+import { exec } from "child_process";
 import { promisify } from "util";
-import { decode } from "iconv-lite";
+import { Content } from "../DTOs/content";
 
-const execFilePromise = promisify(execFile);
+const execPromise = promisify(exec);
 
 export interface ContentInfo {
   platform: string;
@@ -61,82 +61,6 @@ export class WebInstallationService {
       }
     });
 
-    /*
-
-    const desktopPath = path.join(os.homedir(), 'Desktop');
-        
-        // API'den gelen custom filename'i kullan, yoksa varsayılan filename'i al
-        let filename;
-        if (customFileName) {
-          filename = customFileName;
-          customFileName = null; // Kullandıktan sonra temizle
-        } else {
-          filename = item.getFilename();
-        }
-        
-        const safeName = filename.replace(/[<>:"/\\|?*]/g, '_');
-        
-        // Masaüstüne kaydet
-        const savePath = path.join(desktopPath, safeName);
-        item.setSavePath(savePath);
-    
-        console.log('Download başladı:', safeName);
-        console.log('Kaydedilecek konum:', savePath);
-    
-        // İndirme ilerlemesini UI'ya gönder (win.webContents kullan)
-        item.on('updated', (event, state) => {
-          if (state === 'interrupted') {
-            console.log('Download kesildi');
-            win.webContents.send('download-progress', { 
-              state: 'interrupted', 
-              filename: safeName 
-            });
-          } else if (state === 'progressing') {
-            if (item.isPaused()) {
-              console.log('Download duraklatıldı');
-              win.webContents.send('download-progress', { 
-                state: 'paused', 
-                filename: safeName 
-              });
-            } else {
-              const receivedBytes = item.getReceivedBytes();
-              const totalBytes = item.getTotalBytes();
-              const progress = Math.round((receivedBytes / totalBytes) * 100);
-              
-              console.log(`Download progress: ${progress}% (${receivedBytes}/${totalBytes} bytes)`);
-              win.webContents.send('download-progress', { 
-                state: 'progressing', 
-                progress: progress,
-                receivedBytes: receivedBytes,
-                totalBytes: totalBytes,
-                filename: safeName 
-              });
-            }
-          }
-        });
-    
-        item.once('done', (event, state) => {
-          if (state === 'completed') {
-            console.log('Download tamamlandı:', safeName);
-            win.webContents.send('download-progress', { 
-              state: 'completed', 
-              filename: safeName,
-              savePath: savePath 
-            });
-          } else {
-            console.log('Download başarısız:', state);
-            win.webContents.send('download-progress', { 
-              state: 'failed', 
-              filename: safeName,
-              error: state 
-            });
-          }
-        });
-
-    */
-
-
-
   }
 
   downloadUrl(url: string): void {
@@ -150,13 +74,16 @@ export class WebInstallationService {
     let duration: any;
     let mediaUrls: any[] = [];
 
-    const { stdout } = await execFilePromise(`C:\\ffmpeg\\yt-dlp.exe`, [`--print`, `%(extractor)s;%(title)s;%(duration_string)s`, `--no-playlist`, `--get-url`, url], { encoding: 'buffer' });
-    var decoded = decode(stdout, 'utf-8');
-    const consoleOutputs = decoded.split('\n');
-    [platform, title, duration] = consoleOutputs[0].split(';');
-    mediaUrls = consoleOutputs.slice(1).map(line => line.trim()).filter(line => line);
+    const { stdout } = await execPromise(`yt-dlp -J "${url}"`, {encoding:"utf-8"});
 
-    //console.log(`Platform: ${platform}`);
+    const jsonResult: Content = JSON.parse(stdout);
+
+    platform = jsonResult.extractor_key;
+    title = jsonResult.fulltitle;
+    duration = jsonResult.duration_string;
+    mediaUrls = jsonResult.requested_formats?.map(f => f.url) || [];
+
+    console.log(`Platform: ${platform}`);
     console.log(`Title: ${title}`);
     //console.log(`Duration: ${duration}`);
     //console.log(`URLs: ${urls.join(', ')}`);
