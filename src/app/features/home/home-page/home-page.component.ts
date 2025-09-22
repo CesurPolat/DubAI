@@ -5,8 +5,8 @@ import { ContentPickerComponent } from "../components/content-picker/content-pic
 import { ContentViewerComponent } from "../components/content-viewer/content-viewer.component";
 import { gsap } from "gsap";
 import { CommonModule } from '@angular/common';
-import { ContentInfo } from '../../../../../electron/services/webInstallation.service';
 import { slidingComponents } from '../../../shared/utils/animation.utils';
+import { Content } from '../../../../../electron/DTOs/content';
 
 @Component({
   selector: 'app-home-page',
@@ -21,7 +21,7 @@ export class HomePageComponent {
 
   currentView: 'contentPicker' | 'contentViewer' = 'contentPicker';
 
-  contentInfo?: ContentInfo;
+  contentInfo?: Content;
 
   ngAfterViewInit() {
     //this.changeView('contentPicker');
@@ -29,7 +29,7 @@ export class HomePageComponent {
 
   }
 
-  onContentPicked(contentInfo: ContentInfo) {
+  onContentPicked(contentInfo: Content) {
     this.contentInfo = contentInfo;
     slidingComponents(this.currentView, 'contentViewer');
 

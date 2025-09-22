@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ContentInfo } from '../../../../../../electron/services/webInstallation.service';
+import { Content } from '../../../../../../electron/DTOs/content';
 
 @Component({
   selector: 'app-content-viewer',
@@ -9,8 +9,6 @@ import { ContentInfo } from '../../../../../../electron/services/webInstallation
 })
 export class ContentViewerComponent {
 
-  @Input() contentInfo?: ContentInfo;
-
+  @Input() contentInfo?: Content;
   
-
 }

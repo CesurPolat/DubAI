@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { SetupStatus } from './services/setup.service';
-import { ContentInfo } from './services/webInstallation.service';
+import { Content } from './DTOs/content';
 
 export interface IAPIs {
     // Setup Service
@@ -9,7 +9,7 @@ export interface IAPIs {
     SetupChecker: () => Promise<SetupStatus>;
 
     // Web Installation Service
-    GetContentInfo: (url: string) => Promise<ContentInfo>;
+    GetContent: (url: string) => Promise<Content>;
 }
 
 const APIs: IAPIs = {
@@ -19,7 +19,7 @@ const APIs: IAPIs = {
     SetupChecker: () => ipcRenderer.invoke('setupChecker'),
 
     // Web Installation Service
-    GetContentInfo: (url: string) => ipcRenderer.invoke('getContentInfo', url)
+    GetContent: (url: string) => ipcRenderer.invoke('getContent', url)
 };
 
 contextBridge.exposeInMainWorld('API', APIs)

@@ -5,7 +5,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 
 import { matFolder } from '@ng-icons/material-icons/baseline';
 import { LoadingComponent } from "../../../../shared/components/loading/loading.component";
-import { ContentInfo } from '../../../../../../electron/services/webInstallation.service';
+import { Content } from '../../../../../../electron/DTOs/content';
 
 
 @Component({
@@ -17,7 +17,7 @@ import { ContentInfo } from '../../../../../../electron/services/webInstallation
 })
 export class ContentPickerComponent {
 
-  @Output() contentPicked = new EventEmitter<ContentInfo>();
+  @Output() contentPicked = new EventEmitter<Content>();
 
   url: string = '';
 
@@ -27,7 +27,7 @@ export class ContentPickerComponent {
     if(this.isContentInfoLoading) return;
 
     this.isContentInfoLoading = true;
-    window.API.GetContentInfo(this.url).then(contentInfo => {
+    window.API.GetContent(this.url).then(contentInfo => {
       console.log(contentInfo);
       this.isContentInfoLoading = false;
       this.contentPicked.emit(contentInfo);

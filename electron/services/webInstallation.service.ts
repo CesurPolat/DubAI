@@ -6,13 +6,6 @@ import { Content } from "../DTOs/content";
 
 const execPromise = promisify(exec);
 
-export interface ContentInfo {
-  platform: string;
-  title: string;
-  duration: string;
-  mediaUrls: string[];
-}
-
 export class WebInstallationService {
 
   _webContents: WebContents;
@@ -23,7 +16,7 @@ export class WebInstallationService {
   }
 
   initListeners(): void {
-    ipcMain.handle('getContentInfo', (event, url: string) => this.getContentInfo(url));
+    ipcMain.handle('getContent', (event, url: string) => this.getContent(url));
   }
 
   downloadEventListener(event: Event, item: DownloadItem, webContents: WebContents): void {
@@ -67,33 +60,13 @@ export class WebInstallationService {
     this._webContents.downloadURL(url);
   }
 
-  async getContentInfo(url: string): Promise<ContentInfo> {
-
-    let platform: any;
-    let title: any;
-    let duration: any;
-    let mediaUrls: any[] = [];
+  async getContent(url: string): Promise<Content> {
 
     const { stdout } = await execPromise(`yt-dlp -J "${url}"`, {encoding:"utf-8"});
 
     const jsonResult: Content = JSON.parse(stdout);
 
-    platform = jsonResult.extractor_key;
-    title = jsonResult.fulltitle;
-    duration = jsonResult.duration_string;
-    mediaUrls = jsonResult.requested_formats?.map(f => f.url) || [];
-
-    console.log(`Platform: ${platform}`);
-    console.log(`Title: ${title}`);
-    //console.log(`Duration: ${duration}`);
-    //console.log(`URLs: ${urls.join(', ')}`);
-
-    return {
-      platform,
-      title,
-      duration,
-      mediaUrls
-    };
+    return jsonResult;
 
   }
 
